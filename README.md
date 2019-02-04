@@ -7,7 +7,7 @@ To Install:
 
     sudo apt-get install fabric=1.14.0-1
 
-    git clone git@github.com:atlab/docker.git
+    git clone git@github.com:atlab/gpu-deploy.git
 
     cd gpu-deploy
 
