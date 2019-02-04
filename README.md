@@ -13,7 +13,7 @@ To Install:
 
     pip install .
 
-`/example/` is a template for creating `fabfile.py`, `Dockerfile`, `docker-compose.yml`, and scripts.  Pay attention to how these files should be organized in directories.  To use, navigate to the example directory with the fabfile:
+`/example/` is a template for creating `fabfile.py`, `Dockerfile`, `docker-compose.yml`, `.env`, and scripts.  Pay attention to how these files should be organized in directories.  To use, navigate to the example directory with the fabfile:
 
     cd example
 
