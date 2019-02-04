@@ -25,7 +25,7 @@ To stop all of these jupyter notebook containers:
 
     fab -H at-gpu-ex.bdc.bcm.edu stop_atlab
 
-To run 4 `hello.py` jobs on the host `at-gpu-ex.bdc.bcm.edu` with 1 gpus per container:
+To run 4 `hello.py` jobs on the host `at-gpu-ex.bdc.bcm.edu` with 1 gpu per container:
 
     fab -H at-gpu-ex.bdc.bcm.edu deploy_atlab:hello,n=4
 
