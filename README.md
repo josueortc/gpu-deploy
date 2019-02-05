@@ -18,7 +18,7 @@ To Install:
     pip install .
 
 
-`/example/` is a template for creating `fabfile.py`, `Dockerfile`, `docker-compose.yml`, `.env`, and scripts.  Pay attention to how these files should be organized in directories.  `Dockerfile` and `docker-compose.yml` must together in a single directory, and all scripts must be together in another directory.  However, `.env` can be whatever path that is specified by the user.
+`/example/` is a template for creating `fabfile.py`, `Dockerfile`, `docker-compose.yml`, `.env`, and scripts.  Notice how these files are organized in directories.  `Dockerfile` and `docker-compose.yml` must together in a directory, and all scripts must be together in another directory.  However, `.env` can be whatever path that is specified by the user.
 
 To use, navigate to the example directory with the fabfile:
 
