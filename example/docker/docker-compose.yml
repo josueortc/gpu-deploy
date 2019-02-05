@@ -2,7 +2,7 @@ version: '3'
 services:
   atlab:
     build: .
-    env_file: /home/${USER}/.gpu-deploy/.env
+    env_file: .env
     volumes:
       - /tmp/:/tmp/
       - /etc/localtime:/etc/localtime:ro

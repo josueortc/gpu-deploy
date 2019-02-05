@@ -48,21 +48,6 @@ def all_machines():
     env.hosts = env.machines.split(',')
 
 
-def get_branch(gitdir):
-    """
-    Gets the branch of a git directory. 
-
-    Args:
-        gitdir: path of the git directory 
-
-    Returns: current active branch
-
-    """
-    with lcd(join(env.localbasedir, gitdir)):
-        branch = local('git symbolic-ref --short HEAD', capture=True)
-    return branch
-
-
 def gpu_devices():
     ret = []
     for dev in run('ls /dev/nvidia*').split():
@@ -142,7 +127,10 @@ def logs(pattern, wildcard='*'):
 
 class Deploy():
 
-    def __init__(self, docker_dir='atlab', scripts_dir='master', env_path=None):
+    def __init__(self, docker_dir, scripts_dir, env_path):
+        assert basename(env_path) == '.env', 'env_file for docker-compose must be named ".env"'
+        assert basename(scripts_dir) != str(env.user), 'scripts directory name cannot be the same as the username'
+
         self.local_docker_dir = docker_dir
         self.local_scripts_dir = scripts_dir
         self.local_env_path = env_path
@@ -151,16 +139,15 @@ class Deploy():
         self.host_docker_dir_tmp = join(self.host_dir, basename(self.local_docker_dir))
         self.host_docker_dir = join(self.host_dir, env.user)
         self.host_scripts_dir = join(self.host_dir, basename(self.local_scripts_dir))
-        self.host_env_path = join(self.host_dir, basename(self.local_env_path))
 
     def initialize(self):
         run('rm -rf ' + self.host_dir)
         run('mkdir -p ' + self.host_dir)
         local('scp -r {} {}:{}'.format(self.local_docker_dir, env.host_string, self.host_dir))
-        local('scp -r {} {}:{}'.format(self.local_scripts_dir, env.host_string, self.host_dir))
-        local('scp {} {}:{}'.format(self.local_env_path, env.host_string, self.host_dir))
         run('mv {} {}'.format(self.host_docker_dir_tmp, self.host_docker_dir))
-        
+        local('scp -r {} {}:{}'.format(self.local_scripts_dir, env.host_string, self.host_dir))
+        local('scp {} {}:{}'.format(self.local_env_path, env.host_string, self.host_docker_dir))
+
     def finalize(self):
         remove_old_images()
         run('rm -rf ' + self.host_dir)
