@@ -148,9 +148,10 @@ class Deploy():
         self.local_env_path = env_path
 
         self.host_dir = join('/home', env.user, '.gpu-deploy')
-        self.host_docker_dir = join(self.host_dir, 'docker')
-        self.host_scripts_dir = join(self.host_dir, 'scripts')
-        self.host_env_path = join(self.host_dir, '.env')
+        self.host_docker_dir_tmp = join(self.host_dir, basename(self.local_docker_dir))
+        self.host_docker_dir = join(self.host_dir, env.user)
+        self.host_scripts_dir = join(self.host_dir, basename(self.local_scripts_dir))
+        self.host_env_path = join(self.host_dir, basename(self.local_env_path))
 
     def initialize(self):
         run('rm -rf ' + self.host_dir)
@@ -158,6 +159,7 @@ class Deploy():
         local('scp -r {} {}:{}'.format(self.local_docker_dir, env.host_string, self.host_dir))
         local('scp -r {} {}:{}'.format(self.local_scripts_dir, env.host_string, self.host_dir))
         local('scp {} {}:{}'.format(self.local_env_path, env.host_string, self.host_dir))
+        run('mv {} {}'.format(self.host_docker_dir_tmp, self.host_docker_dir))
         
     def finalize(self):
         remove_old_images()
