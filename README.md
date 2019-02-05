@@ -6,6 +6,7 @@ Requirements: nvidia-docker 2.0.3, nvidia-container-runtime 1.0.0
 On all host machines, set the default docker runtime to nvidia by adding the line `"default-runtime": "nvidia"` to `/etc/docker.daemon.json`
     
 
+
 To Install:
 
     sudo apt-get install fabric=1.14.0-1
@@ -16,7 +17,10 @@ To Install:
 
     pip install .
 
-`/example/` is a template for creating `fabfile.py`, `Dockerfile`, `docker-compose.yml`, `.env`, and scripts.  Pay attention to how these files should be organized in directories.  To use, navigate to the example directory with the fabfile:
+
+`/example/` is a template for creating `fabfile.py`, `Dockerfile`, `docker-compose.yml`, `.env`, and scripts.  Pay attention to how these files should be organized in directories.  `Dockerfile` and `docker-compose.yml` must together in a single directory, and all scripts must be together in another directory.  However, `.env` can be whatever path that is specified by the user.
+
+To use, navigate to the example directory with the fabfile:
 
     cd example
 
