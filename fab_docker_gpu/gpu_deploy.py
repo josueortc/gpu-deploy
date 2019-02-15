@@ -156,16 +156,17 @@ class Deploy():
         gpus = int(gpus)
         n = int(n)
         free_gpus = sorted(free_gpu_slots())
+        _service = service
 
         self.initialize()
         with cd(self.host_docker_dir):
             run('docker-compose build --no-cache --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" {}'.format(service))
             bare_run_str = 'docker-compose run -d'
-
             gpu_i = 0
             container_i = 0
             gpu_groups = []
             while gpu_i < len(free_gpus):
+                service = _service
                 gpu_j = gpu_i + gpus
                 gpu_ids = free_gpus[gpu_i: gpu_j]
 
