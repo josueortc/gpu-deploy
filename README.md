@@ -3,7 +3,7 @@ Fabric library for Docker GPU deployment
 
 Requirements: nvidia-docker 2.0.3, nvidia-container-runtime 1.0.0
 
-On all host machines, set the default docker runtime to nvidia by adding the line `"default-runtime": "nvidia"` to `/etc/docker.daemon.json`
+On all host machines, set the default docker runtime to nvidia by adding the line `"default-runtime": "nvidia"` to `/etc/docker/daemon.json`
     
 
 
