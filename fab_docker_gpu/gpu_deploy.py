@@ -153,15 +153,15 @@ class Deploy():
         run('rm -rf ' + self.host_dir)
 
     def deploy(self, service, script=None, n=10, gpus=1, token=None):
+        _service = service
         gpus = int(gpus)
         n = int(n)
-        free_gpus = sorted(free_gpu_slots())
-        _service = service
 
         self.initialize()
         with cd(self.host_docker_dir):
             run('docker-compose build --no-cache --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" {}'.format(service))
             bare_run_str = 'docker-compose run -d'
+            free_gpus = sorted(free_gpu_slots())
             gpu_i = 0
             container_i = 0
             gpu_groups = []
