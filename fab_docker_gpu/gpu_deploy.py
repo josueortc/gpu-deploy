@@ -157,6 +157,10 @@ class Deploy():
         gpus = int(gpus)
         n = int(n)
 
+        if len(free_gpu_slots()) == 0:
+            puts('No free gpus on {}'.format(env.host_string))
+            return
+
         self.initialize()
         with cd(self.host_docker_dir):
             run('docker-compose build --no-cache --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" {}'.format(service))
