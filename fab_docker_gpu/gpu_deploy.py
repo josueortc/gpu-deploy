@@ -152,6 +152,34 @@ class Deploy():
         remove_old_images()
         run('rm -rf ' + self.host_dir)
 
+    def no_gpu_deploy(self, service, script=None, token=None):
+
+        name = env.user + '_' + service + '_{script}_no_gpu'
+
+        self.initialize()
+
+        with cd(self.host_docker_dir):
+
+            if script is None:
+                name = name.format(script='notebook')
+                args = '-p 8888:8888'
+                if token is not None:
+                    service += ' --NotebookApp.token={}'.format(token)
+            else:
+                name = name.format(script)
+                args = ' -v {}:/scripts'.format(join(self.host_scripts_dir))
+                args += ' --entrypoint "python3 /scripts/{}.py"'.format(script)
+
+            exists = run('(docker ps | grep {} > /dev/null 2>&1) && echo True'.format(name), warn_only=True)
+            if exists == 'True':
+                puts('Notebook already exists')
+                return
+
+            run('(docker ps -a | grep {name}) && docker rm {name}'.format(name=name),
+                warn_only=True)
+            run('docker-compose build --no-cache --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" {}'.format(service))
+            run('docker-compose run -d -e NVIDIA_VISIBLE_DEVICES=none {} --name {} {}'.format(args, name, service))
+
     def deploy(self, service, script=None, n=10, gpus=1, token=None):
         _service = service
         gpus = int(gpus)
@@ -177,7 +205,7 @@ class Deploy():
                 if len(gpu_ids) < gpus or container_i >= n:
                     break
 
-                name = env.user + '_' + service + '_{script}_' + '_'.join(gpu_ids)
+                name = env.user + '_' + service + '_{script}_gpu' + '_'.join(gpu_ids)
                 args = ' -e NVIDIA_VISIBLE_DEVICES={}'.format(','.join(gpu_ids))
                 gpu_run_str = bare_run_str + args
 
@@ -202,7 +230,12 @@ class Deploy():
         self.finalize()
         puts('started service {} on {} on GPUs {}'.format(env.host_string, service, ' '.join(gpu_groups)))
 
-    def stop(self, service, script=None):
+    def stop(self, service, script=None, token=None):
         wildcard = env.user + '_' + service + '_{script}'
+        wildcard = wildcard.format(script='notebook' if script is None else script)
+        stop('{}*'.format(wildcard))
+
+    def no_gpu_stop(self, service, script=None):
+        wildcard = env.user + '_' + service + '_{script}_no_gpu'
         wildcard = wildcard.format(script='notebook' if script is None else script)
         stop('{}*'.format(wildcard))
