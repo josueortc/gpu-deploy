@@ -205,7 +205,7 @@ class Deploy():
                 if len(gpu_ids) < gpus or container_i >= n:
                     break
 
-                name = env.user + '_' + service + '_{script}_gpu' + '_'.join(gpu_ids)
+                name = env.user + '_' + service + '_{script}_gpu_' + '_'.join(gpu_ids)
                 args = ' -e NVIDIA_VISIBLE_DEVICES={}'.format(','.join(gpu_ids))
                 gpu_run_str = bare_run_str + args
 
