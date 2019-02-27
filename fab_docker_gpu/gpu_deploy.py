@@ -231,7 +231,7 @@ class Deploy():
         puts('started service {} on {} on GPUs {}'.format(env.host_string, service, ' '.join(gpu_groups)))
 
     def stop(self, service, script=None, token=None):
-        wildcard = env.user + '_' + service + '_{script}'
+        wildcard = env.user + '_' + service + '_{script}_gpu'
         wildcard = wildcard.format(script='notebook' if script is None else script)
         stop('{}*'.format(wildcard))
 
