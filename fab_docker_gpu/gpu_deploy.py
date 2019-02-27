@@ -152,6 +152,7 @@ class Deploy():
         run('rm -rf ' + self.host_dir)
 
     def no_gpu_deploy(self, service, script=None, token=None):
+        _service = service
 
         name = env.user + '_' + service + '_{script}_no_gpu'
 
@@ -176,7 +177,7 @@ class Deploy():
 
             run('(docker ps -a | grep {name}) && docker rm {name}'.format(name=name),
                 warn_only=True)
-            run('docker-compose build --no-cache --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" {}'.format(service))
+            run('docker-compose build --no-cache --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" {}'.format(_service))
             run('docker-compose run -d -e NVIDIA_VISIBLE_DEVICES=none {} --name {} {}'.format(args, name, service))
 
     def deploy(self, service, script=None, n=10, gpus=1, token=None):
