@@ -10,7 +10,6 @@ from getpass import getpass
 from fabric.contrib.files import exists
 from fabric.operations import put
 from fabric.utils import puts
-import numpy as np
 import inspect
 
 device_re = r'/dev/nvidia(?P<device>\d+)'
