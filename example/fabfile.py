@@ -1,4 +1,4 @@
-from fab_docker_gpu.gpu_deploy import *
+from gpu_deploy import *
 
 
 
