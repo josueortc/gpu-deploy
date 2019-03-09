@@ -12,14 +12,11 @@ On all host machines, set the default docker runtime to nvidia by adding the lin
 $ sudo apt-get install fabric=1.14.0-1
 $ pip2 install git+https://github.com/atlab/gpu-deploy.git
 ```
-
-    <!--
-    git clone git@github.com:atlab/gpu-deploy.git
-
-    cd gpu-deploy
-
-    pip2 install . 
-    -->
+<!--
+git clone git@github.com:atlab/gpu-deploy.git
+cd gpu-deploy
+pip2 install . 
+-->
 
 ## Usage
 
