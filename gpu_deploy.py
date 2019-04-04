@@ -184,6 +184,7 @@ class Deploy():
         _service = service
         gpus = int(gpus)
         n = int(n)
+        pyargs = '' if pyargs is None else ' {}'.format(pyargs)
 
         if len(free_gpu_slots()) == 0:
             puts('No free gpus on {}'.format(env.host_string))
@@ -217,9 +218,7 @@ class Deploy():
                 else:
                     name = name.format(script=script)
                     args = ' -v {}:/scripts'.format(join(self.host_scripts_dir))
-                    args += ' --entrypoint "python3 /scripts/{}.py"'.format(script)
-                    if pyargs is not None:
-                        args += ' {}'.format(pyargs)
+                    args += ' --entrypoint "python3 /scripts/{}.py{}"'.format(script, pyargs)
 
                 run('(docker ps -a | grep {name}) && docker rm {name}'.format(name=name),
                     warn_only=True)
