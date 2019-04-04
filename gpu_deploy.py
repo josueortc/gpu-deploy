@@ -180,7 +180,7 @@ class Deploy():
             run('docker-compose build --no-cache --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" {}'.format(_service))
             run('docker-compose run -d -e NVIDIA_VISIBLE_DEVICES=none {} --name {} {}'.format(args, name, service))
 
-    def deploy(self, service, script=None, n=10, gpus=1, token=None):
+    def deploy(self, service, script=None, n=10, gpus=1, token=None, pyargs=None):
         _service = service
         gpus = int(gpus)
         n = int(n)
@@ -218,6 +218,8 @@ class Deploy():
                     name = name.format(script=script)
                     args = ' -v {}:/scripts'.format(join(self.host_scripts_dir))
                     args += ' --entrypoint "python3 /scripts/{}.py"'.format(script)
+                    if pyargs is not None:
+                        args += ' {}'.format(pyargs)
 
                 run('(docker ps -a | grep {name}) && docker rm {name}'.format(name=name),
                     warn_only=True)
