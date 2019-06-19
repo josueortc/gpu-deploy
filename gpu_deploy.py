@@ -142,10 +142,10 @@ class Deploy():
     def initialize(self):
         run('rm -rf ' + self.host_dir)
         run('mkdir -p ' + self.host_dir)
-        local('scp -r {} {}:{}'.format(self.local_docker_dir, env.host_string, self.host_dir))
+        local('scp -r {} {}@{}:{}'.format(env.user, self.local_docker_dir, env.host_string, self.host_dir))
         run('mv {} {}'.format(self.host_docker_dir_tmp, self.host_docker_dir))
-        local('scp -r {} {}:{}'.format(self.local_scripts_dir, env.host_string, self.host_dir))
-        local('scp {} {}:{}'.format(self.local_env_path, env.host_string, self.host_docker_dir))
+        local('scp -r {}@{} {}:{}'.format(env.user, self.local_scripts_dir, env.host_string, self.host_dir))
+        local('scp {} {}@{}:{}'.format(env.user, self.local_env_path, env.host_string, self.host_docker_dir))
 
     def finalize(self):
         remove_old_images()
